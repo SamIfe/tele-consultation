@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { USER_ROLES } = require('../utils/constants');
+const addressSchema = require('./Address');
 
 const userSchema = new mongoose.Schema({
   userId: { type: String, unique: true, required: true },
@@ -13,15 +14,12 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: String,
   dateOfBirth: Date,
-  addresses: [{
-    street: String,
-    city: String,
-    state: String,
-    postalCode: String,
-    country: { type: String, default: 'Nigeria' }
-  }],
+  addresses: [addressSchema],
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
+}, {
+  discriminatorKey: 'userType',
+  collection: 'users'
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
-
+const { APPOINTMENT_STATUS } = require('../utils/constants');
 
 const appointmentSchema = new mongoose.Schema({
   appointmentId: { type: String, unique: true, required: true },
+  patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
+  doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor', required: true },
   appointmentDateTime: { type: Date, required: true },
+  reason: String,
   status: { 
     type: String, 
-    enum: ['pending', 'confirmed', 'cancelled', 'completed'], 
-    default: 'pending' 
+    enum: Object.values(APPOINTMENT_STATUS), 
+    default: APPOINTMENT_STATUS.PENDING 
   },
-  patientId: { type: String, required: true },
-  doctorId: { type: String, required: true },
-  symptoms: String,
-  appointmentType: { type: String, enum: ['consultation', 'follow-up'], default: 'consultation' },
+  notes: String,
   createdAt: { type: Date, default: Date.now }
 });
 

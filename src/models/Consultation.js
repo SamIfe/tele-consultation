@@ -1,17 +1,23 @@
-
-
+const mongoose = require('mongoose');
+const { CONSULTATION_STATUS } = require('../utils/constants');
 
 const consultationSchema = new mongoose.Schema({
   consultationId: { type: String, unique: true, required: true },
-  appointmentId: { type: String, required: true },
-  startDateTime: Date,
+  appointmentId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Appointment', 
+    required: true 
+  },
+  startDateTime: { type: Date, required: true },
   endDateTime: Date,
   notes: String,
-  chatMessages: [{
-    sender: String, // 'patient' or 'doctor'
-    message: String,
-    timestamp: { type: Date, default: Date.now },
-    messageType: { type: String, enum: ['text', 'image', 'file'], default: 'text' }
-  }],
-  status: { type: String, enum: ['scheduled', 'ongoing', 'completed'], default: 'scheduled' }
+  prescription: String,
+  status: { 
+    type: String, 
+    enum: Object.values(CONSULTATION_STATUS), 
+    default: CONSULTATION_STATUS.SCHEDULED 
+  },
+  roomUrl: String
 });
+
+module.exports = mongoose.model('Consultation', consultationSchema);

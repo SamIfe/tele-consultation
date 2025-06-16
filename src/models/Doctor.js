@@ -2,8 +2,7 @@
 const mongoose = require('mongoose');
 const User = require('./User');
 
-const doctorSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
+const Doctor = User.discriminator('Doctor', new mongoose.Schema({
   specialization: { type: String, required: true },
   licenseNumber: { type: String, unique: true, required: true },
   qualifications: [String],
@@ -20,6 +19,6 @@ const doctorSchema = new mongoose.Schema({
   totalReviews: { type: Number, default: 0 },
   bio: String,
   profileImage: String
-});
+}));
 
-module.exports = User.discriminator('doctor', doctorSchema);
+module.exports = Doctor;
